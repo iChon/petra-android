@@ -1,13 +1,14 @@
 package com.wuc.viewinject.utils;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 
 import com.wuc.viewinject.annotation.ContentView;
+import com.wuc.viewinject.annotation.OnClick;
 import com.wuc.viewinject.annotation.ViewInject;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -21,6 +22,34 @@ public class InjectUtils {
 
         injectContentView(act, clazz);
         injectViews(act, clazz);
+        injectEvent(act, clazz);
+    }
+
+    private static void injectEvent(final Activity act, Class<? extends Activity> clazz) {
+        Method[] methods = clazz.getDeclaredMethods();
+        if (methods == null || methods.length <= 0) {
+            return;
+        }
+        for (final Method method : methods) {
+            OnClick onClick = method.getAnnotation(OnClick.class);
+            if (onClick == null) {
+                continue;
+            }
+
+            View view = act.findViewById(onClick.value());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    method.setAccessible(true);
+                    try {
+                        method.invoke(act, v);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+        }
     }
 
     private static void injectViews(Activity act, Class<? extends Activity> clazz) {
@@ -51,7 +80,7 @@ public class InjectUtils {
                 Method setContentViewMethod = clazz.getMethod("setContentView", int.class);
                 setContentViewMethod.invoke(act, contentView.value());
             } catch (Throwable e) {
-                Log.d(InjectUtils.class.getName(), e.getMessage());
+                e.printStackTrace();
             }
         }
     }

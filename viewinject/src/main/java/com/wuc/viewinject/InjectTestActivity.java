@@ -7,12 +7,12 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.wuc.viewinject.annotation.ContentView;
-import com.wuc.viewinject.utils.InjectUtils;
+import com.wuc.viewinject.annotation.OnClick;
 import com.wuc.viewinject.annotation.ViewInject;
+import com.wuc.viewinject.utils.InjectUtils;
 import com.wuc.viewinject.utils.MD5;
 
 /**
@@ -22,8 +22,6 @@ import com.wuc.viewinject.utils.MD5;
 @ContentView(R.layout.activity_inject_test)
 public class InjectTestActivity extends AppCompatActivity {
 
-    @ViewInject(R.id.btn)
-    private Button btn;
     @ViewInject(R.id.textView)
     private TextView textView;
 
@@ -31,13 +29,13 @@ public class InjectTestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         InjectUtils.inject(this);
+    }
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSignature();
-            }
-        });
+    @OnClick(R.id.btn)
+    void onClick(View v) {
+        if (v.getId() == R.id.btn) {
+            getSignature();
+        }
     }
 
     private void getSignature() {
