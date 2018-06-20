@@ -1,1 +1,1 @@
-include ':app', ':viewinject'
+include ':app', ':viewinject-anno', ':viewinject-reflect'
