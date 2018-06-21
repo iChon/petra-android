@@ -1,4 +1,4 @@
-package com.wuc.viewinject;
+package com.wuc.viewinject.reflect;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,4 +1,4 @@
-package com.wuc.viewinject.annotation;
+package com.wuc.viewinject.reflect.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

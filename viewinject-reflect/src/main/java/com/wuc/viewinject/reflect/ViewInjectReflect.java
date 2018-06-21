@@ -3,9 +3,9 @@ package com.wuc.viewinject.reflect;
 import android.app.Activity;
 import android.view.View;
 
-import com.wuc.viewinject.annotation.ContentView;
-import com.wuc.viewinject.annotation.OnClick;
-import com.wuc.viewinject.annotation.ViewInject;
+import com.wuc.viewinject.reflect.annotation.ContentView;
+import com.wuc.viewinject.reflect.annotation.OnClick;
+import com.wuc.viewinject.reflect.annotation.ViewInject;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
  * @author wuc
  * @date 2018/5/29
  */
-public class InjectUtils {
+public class ViewInjectReflect {
 
     public static void inject(Activity act) {
         Class<? extends Activity> clazz = act.getClass();

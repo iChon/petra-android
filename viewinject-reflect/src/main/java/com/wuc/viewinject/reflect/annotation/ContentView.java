@@ -1,4 +1,4 @@
-package com.wuc.viewinject.annotation;
+package com.wuc.viewinject.reflect.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,10 +9,8 @@ import java.lang.annotation.Target;
  * @author wuc
  * @date 2018/5/29
  */
-@Target(ElementType.FIELD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ViewInject {
-
+public @interface ContentView {
     int value() default -1;
-
 }

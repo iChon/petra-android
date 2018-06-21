@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".viewinject.InjectTestReflectActivity" />
+        <activity android:name=".viewinject.InjectTestAptActivity" />
     </application>
 
 </manifest>

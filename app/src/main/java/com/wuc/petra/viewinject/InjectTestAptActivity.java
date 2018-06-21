@@ -12,33 +12,39 @@ import android.widget.TextView;
 import com.wuc.petra.BuildConfig;
 import com.wuc.petra.R;
 import com.wuc.petra.util.MD5;
-import com.wuc.viewinject.reflect.ViewInjectReflect;
-import com.wuc.viewinject.reflect.annotation.ContentView;
-import com.wuc.viewinject.reflect.annotation.OnClick;
-import com.wuc.viewinject.reflect.annotation.ViewInject;
+import com.wuc.viewinject.annotation.ContentView;
+import com.wuc.viewinject.annotation.ViewInject;
+import com.wuc.viewinject.apt.ViewInjectApt;
 
 /**
  * @author wuc
- * @date 2018/5/29
+ * @date 2018/6/20
  */
 @ContentView(R.layout.activity_inject_test)
-public class InjectTestReflectActivity extends AppCompatActivity {
+public final class InjectTestAptActivity extends AppCompatActivity {
 
     @ViewInject(R.id.textView)
-    private TextView textView;
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ViewInjectReflect.inject(this);
+        ViewInjectApt.inject(this);
+
+        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSignature();
+            }
+        });
     }
 
-    @OnClick(R.id.btn)
-    void onClick(View v) {
-        if (v.getId() == R.id.btn) {
-            getSignature();
-        }
-    }
+//    @OnClick(R.id.btn)
+//    void onClick(View v) {
+//        if (v.getId() == R.id.btn) {
+//            getSignature();
+//        }
+//    }
 
     private void getSignature() {
         Signature[] rawSignature = getRawSignature(this, BuildConfig.APPLICATION_ID);

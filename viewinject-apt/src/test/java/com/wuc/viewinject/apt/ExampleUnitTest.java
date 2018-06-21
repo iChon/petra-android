@@ -1,4 +1,4 @@
-package com.wuc.viewinject;
+package com.wuc.viewinject.apt;
 
 import org.junit.Test;
 
