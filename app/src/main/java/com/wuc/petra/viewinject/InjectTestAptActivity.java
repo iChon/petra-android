@@ -13,6 +13,7 @@ import com.wuc.petra.BuildConfig;
 import com.wuc.petra.R;
 import com.wuc.petra.util.MD5;
 import com.wuc.viewinject.annotation.ContentView;
+import com.wuc.viewinject.annotation.OnClick;
 import com.wuc.viewinject.annotation.ViewInject;
 import com.wuc.viewinject.apt.ViewInjectApt;
 
@@ -30,21 +31,14 @@ public final class InjectTestAptActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ViewInjectApt.inject(this);
-
-        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSignature();
-            }
-        });
     }
 
-//    @OnClick(R.id.btn)
-//    void onClick(View v) {
-//        if (v.getId() == R.id.btn) {
-//            getSignature();
-//        }
-//    }
+    @OnClick(R.id.btn)
+    void onClick(View v) {
+        if (v.getId() == R.id.btn) {
+            getSignature();
+        }
+    }
 
     private void getSignature() {
         Signature[] rawSignature = getRawSignature(this, BuildConfig.APPLICATION_ID);

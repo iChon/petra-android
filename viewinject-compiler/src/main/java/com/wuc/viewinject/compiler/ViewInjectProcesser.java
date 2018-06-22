@@ -111,6 +111,16 @@ public class ViewInjectProcesser extends AbstractProcessor {
             ViewInjectInfo viewInjectInfo = new ViewInjectInfo(element);
             bindingTarget.addViewInjectInfo(viewInjectInfo);
         }
+        for (Element element : env.getElementsAnnotatedWith(OnClick.class)) {
+            TypeElement classElement = (TypeElement) element.getEnclosingElement();
+            BindingTarget bindingTarget = bindingMap.get(classElement);
+            if (bindingTarget == null) {
+                bindingTarget = new BindingTarget(elementUtils, classElement);
+                bindingMap.put(classElement, bindingTarget);
+            }
+            OnClickInfo onClickInfo = new OnClickInfo(element);
+            bindingTarget.addOnClickInfo(onClickInfo);
+        }
         return bindingMap;
     }
 

@@ -23,16 +23,22 @@ public class BindingTarget {
 
     private final Element element;
     private final Elements elementUtils;
-    private final List<ViewInjectInfo> viewInjectInfo;
+    private final List<ViewInjectInfo> viewInjectInfoList;
+    private final List<OnClickInfo> onClickInfoList;
 
     public BindingTarget(Elements elementUtils, Element element) {
         this.element = element;
         this.elementUtils = elementUtils;
-        viewInjectInfo = new ArrayList<>();
+        viewInjectInfoList = new ArrayList<>();
+        onClickInfoList = new ArrayList<>();
     }
 
     public void addViewInjectInfo(ViewInjectInfo i) {
-        viewInjectInfo.add(i);
+        viewInjectInfoList.add(i);
+    }
+
+    public void addOnClickInfo(OnClickInfo i) {
+        onClickInfoList.add(i);
     }
 
     public JavaFile generateFile() {
@@ -48,11 +54,41 @@ public class BindingTarget {
         }
 
         // findViewById()
-        for (ViewInjectInfo info : viewInjectInfo) {
-            injectMethodBuilder.addStatement("activity.$N = ($T)(activity.findViewById($L))",
+        for (ViewInjectInfo info : viewInjectInfoList) {
+            injectMethodBuilder.addStatement("activity.$N = ($T) activity.findViewById($L)",
                     info.getFieldName(), ClassName.get(info.getFieldType()), info.getResId());
         }
 
+        // setOnClickListener
+        for (OnClickInfo info : onClickInfoList) {
+            TypeSpec listener = TypeSpec.anonymousClassBuilder("")
+                    .addSuperinterface(ClassName.get("android.view", "View", "OnClickListener"))
+                    .addMethod(
+                            MethodSpec.methodBuilder("onClick")
+                                    .addAnnotation(Override.class)
+                                    .addModifiers(Modifier.PUBLIC)
+                                    .returns(TypeName.VOID)
+                                    .addParameter(ClassName.get("android.view", "View"), "view")
+                                    .addStatement("activity.$N(view)", info.getMethodName())
+                                    .build()
+                    )
+                    .build();
+            ViewInjectInfo targetView = null;
+            for (ViewInjectInfo vii : viewInjectInfoList) {
+                if (info.getResId() == vii.getResId()) {
+                    targetView = vii;
+                    break;
+                }
+            }
+            // 减少finViewById次数
+            if (targetView == null) {
+                injectMethodBuilder.addStatement("activity.findViewById($L).setOnClickListener($L)", info.getResId(), listener);
+            } else {
+                injectMethodBuilder.addStatement("activity.$N.setOnClickListener($L)", targetView.getFieldName(), listener);
+            }
+        }
+
+        // full java file
         TypeSpec targetClass = TypeSpec.classBuilder(element.getSimpleName() + "_Target")
                 .addModifiers(Modifier.PUBLIC)
                 .addSuperinterface(ParameterizedTypeName.get(
@@ -61,7 +97,6 @@ public class BindingTarget {
                 ))
                 .addMethod(injectMethodBuilder.build())
                 .build();
-
         String packageName = elementUtils.getPackageOf(element).getQualifiedName().toString();
 
         return JavaFile.builder(packageName, targetClass).build();
