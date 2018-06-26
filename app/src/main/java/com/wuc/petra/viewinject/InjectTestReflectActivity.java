@@ -1,17 +1,12 @@
 package com.wuc.petra.viewinject;
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.wuc.petra.BuildConfig;
 import com.wuc.petra.R;
-import com.wuc.petra.util.MD5;
+import com.wuc.petra.util.SignatureUtils;
 import com.wuc.viewinject.reflect.ViewInjectReflect;
 import com.wuc.viewinject.reflect.annotation.ContentView;
 import com.wuc.viewinject.reflect.annotation.OnClick;
@@ -36,34 +31,9 @@ public class InjectTestReflectActivity extends AppCompatActivity {
     @OnClick(R.id.btn)
     void onClick(View v) {
         if (v.getId() == R.id.btn) {
-            getSignature();
+            String signature = SignatureUtils.getSignature(this);
+            textView.setText(signature);
         }
-    }
-
-    private void getSignature() {
-        Signature[] rawSignature = getRawSignature(this, BuildConfig.APPLICATION_ID);
-
-        for (Signature signature : rawSignature) {
-            String messageDigest = MD5.getMD5String(signature.toByteArray());
-            textView.setText(messageDigest);
-        }
-    }
-
-    private Signature[] getRawSignature(Context context, String packageName) {
-        if ((packageName == null) || (packageName.length() == 0)) {
-            return null;
-        }
-        PackageManager localPackageManager = context.getPackageManager();
-        PackageInfo localPackageInfo;
-        try {
-            localPackageInfo = localPackageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
-            if (localPackageInfo == null) {
-                return null;
-            }
-        } catch (PackageManager.NameNotFoundException localNameNotFoundException) {
-            return null;
-        }
-        return localPackageInfo.signatures;
     }
 
 }
