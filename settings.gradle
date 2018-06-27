@@ -1,1 +1,1 @@
-include ':app', ':viewinject-anno', ':viewinject-reflect', ':viewinject-compiler', ':viewinject-apt'
+include ':app', ':viewinject-anno', ':viewinject-reflect', ':viewinject-compiler', ':viewinject-apt', ':jetpack-paging'

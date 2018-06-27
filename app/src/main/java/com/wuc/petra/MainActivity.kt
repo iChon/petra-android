@@ -18,6 +18,9 @@ class MainActivity : AppCompatActivity() {
         btn_inject_apt.setOnClickListener {
             startActivity<InjectTestAptActivity>()
         }
+//        btn_paging.setOnClickListener {
+//            startActivity<PagingExampleActivity>()
+//        }
     }
 
 }
