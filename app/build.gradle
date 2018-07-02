@@ -33,5 +33,5 @@ dependencies {
     implementation project(':viewinject-reflect')
     implementation project(':viewinject-apt')
     annotationProcessor project(':viewinject-compiler')
-//    implementation project(':jetpack-paging')
+    implementation project(':jetpack-paging')
 }

@@ -2,6 +2,7 @@ package com.wuc.petra
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.wuc.jetpack_paging.PagingExampleActivity
 import com.wuc.petra.viewinject.InjectTestAptActivity
 import com.wuc.petra.viewinject.InjectTestReflectActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,9 +19,9 @@ class MainActivity : AppCompatActivity() {
         btn_inject_apt.setOnClickListener {
             startActivity<InjectTestAptActivity>()
         }
-//        btn_paging.setOnClickListener {
-//            startActivity<PagingExampleActivity>()
-//        }
+        btn_paging.setOnClickListener {
+            startActivity<PagingExampleActivity>()
+        }
     }
 
 }
