@@ -1,5 +1,7 @@
 package com.wuc.jetpack_paging.net;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -17,9 +19,10 @@ public class RetrofitManager {
     }
 
     private RetrofitManager() {
-        final Retrofit retrofit = (new Retrofit.Builder())
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://gank.io/api/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(new OkHttpClient().newBuilder().addInterceptor(new HttpLoggingInterceptor()).build())
                 .build();
         apiService = retrofit.create(ApiServiceCore.class);
     }

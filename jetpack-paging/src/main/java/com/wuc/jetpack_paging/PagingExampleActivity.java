@@ -1,5 +1,6 @@
 package com.wuc.jetpack_paging;
 
+import android.arch.lifecycle.Observer;
 import android.arch.paging.DataSource;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
@@ -26,6 +27,9 @@ public class PagingExampleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_paging_example);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
+        final StudentAdapter adapter = new StudentAdapter();
+        recyclerView.setAdapter(adapter);
+
         PagedList.Config config = new PagedList.Config.Builder()
                 .setPageSize(PAGE_SIZE)
                 .setInitialLoadSizeHint(PAGE_SIZE)
@@ -40,10 +44,12 @@ public class PagingExampleActivity extends AppCompatActivity {
                     }
                 }, config);
 
-        StudentAdapter adapter = new StudentAdapter();
-        adapter.submitList(builder.build().getValue());
-        recyclerView.setAdapter(adapter);
-
+        builder.build().observe(this, new Observer<PagedList<Student>>() {
+            @Override
+            public void onChanged(@Nullable PagedList<Student> students) {
+                adapter.submitList(students);
+            }
+        });
     }
 
 }
